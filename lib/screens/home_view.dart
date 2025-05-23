@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:workout_app/screens/mode.dart';
 
 class HomeView extends StatefulWidget {
+  const HomeView({super.key});
+
   @override
   _HomeViewState createState() => _HomeViewState();
 }
@@ -223,7 +225,7 @@ class _HomeViewState extends State<HomeView> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 40),
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   height: 200,
                   child: ListView.builder(
