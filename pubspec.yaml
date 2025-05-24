@@ -1,6 +1,6 @@
 name: flutter_application_1
-description: "A new Flutter project."
-publish_to: 'none' 
+description: "A fitness application with workout tracking and user profiles"
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -10,9 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
+  provider: ^6.0.5        # For state management
+  shared_preferences: ^2.2.0  # For local storage
+  flutter_svg: ^2.0.7     # For SVG support (optional)
 
 dev_dependencies:
   flutter_test:
@@ -21,6 +23,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/images/
+    - assets/images/emily.png
+    - assets/images/sule.png
+    - assets/images/alexsandra.png
+    - assets/images/emely.jpg
+    - assets/images/image2.png
+    - assets/images/image3.png
+
+ 
