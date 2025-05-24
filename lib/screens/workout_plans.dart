@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/workout_detail.dart';
 
 class WorkoutPlans extends StatelessWidget {
-  static const List<Map<String, String>> workouts = [
+  static const List<Map<String, dynamic>> workouts = [
     {
       'id': '1',
       'name': 'Morning Yoga Flow',
@@ -10,6 +10,7 @@ class WorkoutPlans extends StatelessWidget {
       'description': 'A gentle 30-minute yoga sequence to start your day with energy and focus.',
       'duration': '30 min',
       'level': 'Beginner',
+      'type': 'yoga', // Added workout type
     },
     {
       'id': '2',
@@ -18,6 +19,7 @@ class WorkoutPlans extends StatelessWidget {
       'description': 'Build strength with this comprehensive full-body workout using bodyweight exercises.',
       'duration': '45 min',
       'level': 'Intermediate',
+      'type': 'strength', // Added workout type
     },
     {
       'id': '3',
@@ -26,6 +28,7 @@ class WorkoutPlans extends StatelessWidget {
       'description': 'High-intensity interval training to boost your metabolism and burn calories.',
       'duration': '20 min',
       'level': 'Advanced',
+      'type': 'cardio', // Added workout type
     },
   ];
 
@@ -51,12 +54,12 @@ class WorkoutPlans extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
-                    image: AssetImage(workout['image']!),
+                    image: AssetImage(workout['image']),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              title: Text(workout['name']!),
+              title: Text(workout['name']),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -70,10 +73,11 @@ class WorkoutPlans extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => WorkoutDetail(
-                      workoutId: workout['id']!,
-                      workoutName: workout['name']!,
-                      imageUrl: workout['image']!,
-                      description: workout['description']!,
+                      workoutId: workout['id'],
+                      workoutName: workout['name'],
+                      imageUrl: workout['image'],
+                      description: workout['description'],
+                      workoutType: workout['type'], // Added workout type parameter
                     ),
                   ),
                 );

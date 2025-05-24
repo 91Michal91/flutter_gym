@@ -195,6 +195,7 @@ class _HomeViewState extends State<HomeView> {
                                       workoutName: exercise['name'],
                                       imageUrl: "assets/images/default_exercise.png",
                                       description: exercise['instructions'] ?? 'No instructions available',
+                                      workoutType: exercise['type'] ?? 'general', // Added workoutType
                                     ),
                                   ),
                                 );
