@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:workout_app/screens/welcom_view.dart';
+import 'package:flutter_application_1/screens/welcom_view.dart';
+
 
 void main() => runApp(MyApp());
 

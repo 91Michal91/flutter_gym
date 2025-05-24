@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:workout_app/screens/home_view.dart';
+import 'package:flutter_application_1/screens/home_view.dart';
+
 
 class WelcomView extends StatefulWidget {
+  const WelcomView({super.key});
+
   @override
   _WelcomViewState createState() => _WelcomViewState();
 }
@@ -81,7 +84,7 @@ class _WelcomViewState extends State<WelcomView> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 40.0),
-                    child: Container(
+                    child: SizedBox(
                       height: 226,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(

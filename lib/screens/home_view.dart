@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:workout_app/screens/mode.dart';
+import 'package:flutter_application_1/screens/mode.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
