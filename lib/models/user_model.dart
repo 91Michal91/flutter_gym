@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart'; 
 class UserData with ChangeNotifier {
   String _name = 'Zezo';
-  String _email = '';
+  final String _email = '';
   String _fitnessLevel = 'Beginner';
   String _profileImage = 'assets/images/emely.jpg';
-  List<String> _workoutHistory = [];
+  final List<String> _workoutHistory = [];
   
   String get name => _name;
   String get email => _email;

@@ -5,7 +5,7 @@ import 'package:flutter_application_1/models/user_model.dart';
 import 'package:flutter_application_1/screens/home_view.dart';
 
 class WelcomView extends StatefulWidget {
-  const WelcomView({Key? key}) : super(key: key);
+  const WelcomView({super.key});
 
   @override
   _WelcomViewState createState() => _WelcomViewState();

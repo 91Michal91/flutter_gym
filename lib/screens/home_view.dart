@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_application_1/models/user_model.dart';
 import 'package:flutter_application_1/screens/profile_view.dart';
 import 'package:flutter_application_1/screens/workout_detail.dart';
 import 'package:flutter_application_1/screens/workout_plans.dart';
+import 'dart:convert';
 
 class HomeView extends StatefulWidget {
-  const HomeView({Key? key}) : super(key: key);
+  const HomeView({super.key});
 
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -14,25 +16,51 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int _currentIndex = 0;
+  List<dynamic> _apiExercises = [];
+  bool _isLoading = true;
 
-  final List<Widget> _screens = [
-    HomeContent(),
-    WorkoutPlans(),
-    ProfileView(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _fetchExercises();
+  }
+
+  Future<void> _fetchExercises() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://api.api-ninjas.com/v1/exercises?muscle=biceps'),
+        headers: {'X-Api-Key': '3huzm+WQcZu6SntAV5C3kw==Q3TtPmnNiaJ6aoMU'},
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _apiExercises = jsonDecode(response.body);
+          _isLoading = false;
+        });
+      } else {
+        setState(() => _isLoading = false);
+        throw Exception('Failed to load exercises');
+      }
+    } catch (e) {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error loading exercises: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: _currentIndex == 0 
+          ? _buildHomeWithApiContent()
+          : _currentIndex == 1
+              ? WorkoutPlans()
+              : ProfileView(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -51,55 +79,29 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
-}
 
-class HomeContent extends StatelessWidget {
-  final List<Category> catego = [
-    Category(
-      id: '1',
-      imagUrl: "assets/images/emily.png",
-      name: "Yoga exercises",
-      description: "Relaxing yoga flow for all levels",
-    ),
-    Category(
-      id: '2',
-      imagUrl: "assets/images/sule.png",
-      name: "Strength Training",
-      description: "Build muscle with these exercises",
-    ),
-    Category(
-      id: '3',
-      imagUrl: "assets/images/alexsandra.png",
-      name: "Cardio Blast",
-      description: "High intensity cardio workout",
-    ),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final userData = Provider.of<UserData>(context);
-    
+  Widget _buildHomeWithApiContent() {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/image3.png"),
           fit: BoxFit.cover,
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 60.0, left: 20),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20),
-              child: Row(
+      child: Column(
+        children: [
+          // Header with user profile
+          Padding(
+            padding: const EdgeInsets.only(top: 60.0, left: 20, right: 20),
+            child: Consumer<UserData>(
+              builder: (context, userData, child) => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         "Hey,",
                         style: TextStyle(
                           fontSize: 32,
@@ -109,7 +111,7 @@ class HomeContent extends StatelessWidget {
                       ),
                       Text(
                         userData.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 32,
                           color: Color(0xFF40D876),
                           fontWeight: FontWeight.bold,
@@ -118,22 +120,18 @@ class HomeContent extends StatelessWidget {
                     ],
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileView(),
-                        ),
-                      );
-                    },
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileView()),
+                    ),
                     child: Container(
                       width: 42,
                       height: 42,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40.0),
+                        borderRadius: BorderRadius.circular(40),
                         border: Border.all(
                           width: 3,
-                          color: Color(0xFF40D876),
+                          color: const Color(0xFF40D876),
                         ),
                         image: DecorationImage(
                           image: AssetImage(userData.profileImage),
@@ -145,77 +143,69 @@ class HomeContent extends StatelessWidget {
                 ],
               ),
             ),
-            // ... rest of your existing HomeView content ...
-            Padding(
-              padding: const EdgeInsets.only(top: 40),
-              child: SizedBox(
-                width: double.infinity,
-                height: 200,
-                child: ListView.builder(
-                  itemCount: catego.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WorkoutDetail(
-                              workoutId: catego[index].id,
-                              workoutName: catego[index].name,
-                              imageUrl: catego[index].imagUrl,
-                              description: catego[index].description,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 172,
-                              width: 141,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(catego[index].imagUrl),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              catego[index].name,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
+          ),
+
+          // Exercises List
+          Expanded(
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFF40D876),
+                    ),
+                  )
+                : _apiExercises.isEmpty
+                    ? const Center(
+                        child: Text(
+                          "No exercises found",
+                          style: TextStyle(color: Colors.white),
                         ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: _apiExercises.length,
+                        itemBuilder: (context, index) {
+                          final exercise = _apiExercises[index];
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            color: Colors.white.withOpacity(0.8),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(16),
+                              leading: const Icon(
+                                Icons.fitness_center,
+                                color: Color(0xFF40D876),
+                              ),
+                              title: Text(
+                                exercise['name'],
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Muscle: ${exercise['muscle']}'),
+                                  Text('Type: ${exercise['type']}'),
+                                  Text('Equipment: ${exercise['equipment']}'),
+                                ],
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => WorkoutDetail(
+                                      workoutId: index.toString(),
+                                      workoutName: exercise['name'],
+                                      imageUrl: "assets/images/default_exercise.png",
+                                      description: exercise['instructions'] ?? 'No instructions available',
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  }),
-              ),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
-}
-
-class Category {
-  final String id;
-  final String imagUrl;
-  final String name;
-  final String description;
-
-  Category({
-    required this.id,
-    required this.imagUrl,
-    required this.name,
-    required this.description,
-  });
 }

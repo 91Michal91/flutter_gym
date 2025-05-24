@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/workout_detail.dart';
 
 class WorkoutPlans extends StatelessWidget {
-  final List<Map<String, String>> workouts = [
+  static const List<Map<String, String>> workouts = [
     {
       'id': '1',
       'name': 'Morning Yoga Flow',
@@ -29,20 +29,22 @@ class WorkoutPlans extends StatelessWidget {
     },
   ];
 
+  const WorkoutPlans({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Workout Plans'),
+        title: const Text('Workout Plans'),
       ),
       body: ListView.builder(
         itemCount: workouts.length,
         itemBuilder: (context, index) {
           final workout = workouts[index];
           return Card(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: ListTile(
-              contentPadding: EdgeInsets.all(16),
+              contentPadding: const EdgeInsets.all(16),
               leading: Container(
                 width: 60,
                 height: 60,
@@ -58,11 +60,11 @@ class WorkoutPlans extends StatelessWidget {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text('${workout['duration']} • ${workout['level']}'),
                 ],
               ),
-              trailing: Icon(Icons.chevron_right),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 Navigator.push(
                   context,

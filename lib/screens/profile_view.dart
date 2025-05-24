@@ -5,6 +5,8 @@ import 'package:flutter_application_1/services/auth_service.dart';
 import 'package:flutter_application_1/screens/workout_plans.dart';
 
 class ProfileView extends StatelessWidget {
+  const ProfileView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData>(context, listen: false);

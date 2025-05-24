@@ -9,12 +9,12 @@ class WorkoutDetail extends StatelessWidget {
   final String description;
 
   const WorkoutDetail({
-    Key? key,
+    super.key,
     required this.workoutId,
     required this.workoutName,
     required this.imageUrl,
     required this.description,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
